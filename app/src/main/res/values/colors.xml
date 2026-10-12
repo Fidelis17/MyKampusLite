@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="accent">#00897B</color>
+    <color name="status_baik">#2E7D32</color>
+    <color name="status_buruk">#C62828</color>
+    <color name="status_netral">#455A64</color>
+    <color name="white">#FFFFFF</color>
+</resources>

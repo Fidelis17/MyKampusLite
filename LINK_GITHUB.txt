@@ -1,0 +1,5 @@
+Nama : Fidelis Kristian Farel
+NIM  : 23410100039
+
+Link GitHub Repository (WAJIB public):
+https://github.com/<username-kamu>/MyKampusLite   <-- ganti setelah push

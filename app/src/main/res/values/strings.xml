@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">MyKampus Lite</string>
+
+    <string name="simpan">Simpan</string>
+    <string name="perbarui">Perbarui</string>
+    <string name="batal">Batal</string>
+    <string name="edit">Edit</string>
+    <string name="hapus">Hapus</string>
+    <string name="hapus_judul">Hapus data?</string>
+    <string name="hapus_pesan">Data \"%1$s\" akan dihapus permanen.</string>
+
+    <string name="judul_form_mahasiswa">Form Mahasiswa</string>
+    <string name="judul_form_dosen">Form Dosen</string>
+    <string name="judul_daftar_mahasiswa">Daftar Mahasiswa</string>
+    <string name="judul_daftar_dosen">Daftar Dosen</string>
+    <string name="kosong">Belum ada data</string>
+
+    <string name="hint_nama">Nama lengkap</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_nim">NIM (10 digit)</string>
+    <string name="hint_jurusan">Jurusan</string>
+    <string name="hint_ipk">IPK (0.0 - 4.0)</string>
+    <string name="hint_nidn">NIDN (10 digit)</string>
+    <string name="hint_matkul">Mata kuliah diampu (pisahkan dengan koma)</string>
+</resources>

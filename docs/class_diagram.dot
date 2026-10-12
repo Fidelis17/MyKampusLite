@@ -1,0 +1,59 @@
+digraph G {
+  graph [rankdir=BT, fontname="Helvetica", bgcolor="white", nodesep=0.45, ranksep=0.7, pad=0.4,
+         label="Class Diagram OOP - MyKampus Lite (MVVM + Room)\nFidelis Kristian Farel - 23410100039", labelloc=t, fontsize=20];
+  node  [shape=record, fontname="Helvetica", fontsize=11, style=filled, fillcolor="#FFFFFF", color="#37474F"];
+  edge  [fontname="Helvetica", fontsize=10, color="#37474F"];
+
+  /* ---------- MODEL (Inheritance, Encapsulation, Polymorphism) ---------- */
+  EvaluasiAkademik [fillcolor="#FFF3E0", label="{«interface»\nEvaluasiAkademik|+ getStatusAkademik(): String}"];
+  BaseEntity [fillcolor="#E3F2FD", label="{«abstract»\nBaseEntity|- id: int\l- createdAt: long\l- updatedAt: long\l|+ getId()/setId()\l+ touch()\l+ equals() / hashCode()\l}"];
+  Person [fillcolor="#E3F2FD", label="{«abstract»\nPerson|- nama: String\l- email: String\l|+ setNama(): min 3 char, tidak kosong\l+ setEmail(): format valid\l+ «abstract» getRole(): String\l+ «abstract» getInfoDetail(): String\l}"];
+  Mahasiswa [fillcolor="#C8E6C9", label="{«Entity» Mahasiswa|- nim: String\l- jurusan: String\l- ipk: double\l|+ setNim(): 10 digit angka\l+ setIpk(): 0.0 - 4.0\l+ getRole(): \"Mahasiswa\"\l+ getStatusAkademik()\l   IPK \> 3.5 Cumlaude / \> 3.0 Memuaskan\l   \< 2.0 Peringatan / else Cukup\l}"];
+  Dosen [fillcolor="#C8E6C9", label="{«Entity» Dosen|- nidn: String\l- mataKuliahDiampu: String\l|+ setNidn(): 10 digit angka\l+ getRole(): \"Dosen\"\l+ getStatusAkademik()\l   MK \> 3 Beban Lebih / else Normal\l}"];
+
+  Person -> BaseEntity [arrowhead=empty, label=" extends"];
+  Mahasiswa -> Person [arrowhead=empty, label=" extends"];
+  Dosen -> Person [arrowhead=empty, label=" extends"];
+  Person -> EvaluasiAkademik [arrowhead=empty, style=dashed, label=" implements"];
+
+  /* ---------- DATA (Abstraction) ---------- */
+  AkademikRepository [fillcolor="#F3E5F5", label="{«interface»\nAkademikRepository\<T extends Person\>|+ getAll(): LiveData\<List\<T\>\>\l+ insert(T, RepositoryCallback)\l+ update(T, RepositoryCallback)\l+ delete(T, RepositoryCallback)\l}"];
+  MahasiswaRepository [fillcolor="#F3E5F5", label="{MahasiswaRepository|- dao: MahasiswaDao\l- executor: Executor\l}"];
+  DosenRepository [fillcolor="#F3E5F5", label="{DosenRepository|- dao: DosenDao\l- executor: Executor\l}"];
+  MahasiswaDao [fillcolor="#FFF9C4", label="{«Dao» MahasiswaDao|+ getAll(): LiveData\<List\<Mahasiswa\>\>\l+ insert / update / delete\l}"];
+  DosenDao [fillcolor="#FFF9C4", label="{«Dao» DosenDao|+ getAll(): LiveData\<List\<Dosen\>\>\l+ insert / update / delete\l}"];
+  MyKampusDatabase [fillcolor="#FFF9C4", label="{«Database» MyKampusDatabase|+ DB_EXECUTOR\l|+ mahasiswaDao()\l+ dosenDao()\l}"];
+
+  MahasiswaRepository -> AkademikRepository [arrowhead=empty, style=dashed, label=" implements"];
+  DosenRepository -> AkademikRepository [arrowhead=empty, style=dashed, label=" implements"];
+  MahasiswaRepository -> MahasiswaDao [arrowhead=vee, label=" uses"];
+  DosenRepository -> DosenDao [arrowhead=vee, label=" uses"];
+  MyKampusDatabase -> MahasiswaDao [arrowhead=vee, style=dotted];
+  MyKampusDatabase -> DosenDao [arrowhead=vee, style=dotted];
+  MahasiswaDao -> Mahasiswa [arrowhead=vee, style=dotted, label=" «entity»"];
+  DosenDao -> Dosen [arrowhead=vee, style=dotted, label=" «entity»"];
+
+  /* ---------- VIEWMODEL ---------- */
+  BaseAkademikViewModel [fillcolor="#FFCCBC", label="{«abstract»\nBaseAkademikViewModel\<T extends Person\>|- repository: AkademikRepository\<T\>\l- daftar / sedangDiedit\l- errorField / pesan\l|+ mulaiEdit(T) / batalEdit()\l+ hapus(T)\l# simpanItem(T)\l# validasi(...)\l}"];
+  MahasiswaViewModel [fillcolor="#FFCCBC", label="{MahasiswaViewModel|+ simpan(nama,email,nim,\l   jurusan,ipkTeks)\l}"];
+  DosenViewModel [fillcolor="#FFCCBC", label="{DosenViewModel|+ simpan(nama,email,\l   nidn,matkul)\l}"];
+
+  MahasiswaViewModel -> BaseAkademikViewModel [arrowhead=empty, label=" extends"];
+  DosenViewModel -> BaseAkademikViewModel [arrowhead=empty, label=" extends"];
+  BaseAkademikViewModel -> AkademikRepository [arrowhead=vee, label=" depends on\l (interface only)"];
+  BaseAkademikViewModel -> Person [arrowhead=vee, style=dotted, label=" T"];
+
+  /* ---------- UI (Polymorphism) ---------- */
+  AkademikAdapter [fillcolor="#B3E5FC", label="{AkademikAdapter\nextends ListAdapter\<Person, ViewHolder\>|- DIFF: ItemCallback\<Person\>\l|+ submit(List\<? extends Person\>)\l+ onBindViewHolder()\l   memanggil getRole(), getInfoDetail(),\l   getStatusAkademik() secara polimorfik\l}"];
+  MahasiswaFragment [fillcolor="#B3E5FC", label="{MahasiswaFragment|- viewModel: MahasiswaViewModel\l}"];
+  DosenFragment [fillcolor="#B3E5FC", label="{DosenFragment|- viewModel: DosenViewModel\l}"];
+  MainActivity [fillcolor="#B3E5FC", label="{MainActivity|ViewPager2 + TabLayout\l(tanpa logic bisnis)\l}"];
+
+  AkademikAdapter -> Person [arrowhead=vee, label=" menampilkan\l Mahasiswa & Dosen"];
+  MahasiswaFragment -> MahasiswaViewModel [arrowhead=vee, label=" observe"];
+  DosenFragment -> DosenViewModel [arrowhead=vee, label=" observe"];
+  MahasiswaFragment -> AkademikAdapter [arrowhead=vee, style=dotted];
+  DosenFragment -> AkademikAdapter [arrowhead=vee, style=dotted];
+  MainActivity -> MahasiswaFragment [arrowhead=odiamond, style=dotted];
+  MainActivity -> DosenFragment [arrowhead=odiamond, style=dotted];
+}
